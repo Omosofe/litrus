@@ -1,0 +1,37 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800);
+
+html {
+    font-size: 15px;
+}
+
+body {
+    background-color: #fcfcfc;
+    font-family: 'Open Sans', sans-serif;
+    height: auto;
+}
+
+.ui.fixed.menu+.ui.grid {
+    padding-top: 4.5rem;
+}
+
+#course-header {
+    font-size: 3.5em;
+    font-weight: 800;
+}
+
+video {
+    border-radius: 0.3rem;
+    margin-left: 5%;
+    width: 90%;
+}
+
+#course-description {
+    font-size: 19px;
+    font-weight: 300;
+}
+
+pre {
+    background-color: #efefef;
+    border-radius: 0.3rem;
+    padding: 6px;
+}

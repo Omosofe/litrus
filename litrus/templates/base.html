@@ -1,0 +1,49 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>Litrus</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+
+</head>
+<body>
+    <div class="ui page grid fixed  large menu">
+        <a href="{% url 'pages:home' %}" class="item"><img style="width:auto" src="{% static 'img/logo.png' %}"></a>
+        <a href="{% url 'courses:courses' %}" class="item">Courses</a>
+        <div class="right menu">
+            {% if user.is_authenticated %}
+            <a href="{% url 'accounts:profile' %}" class="item">Profile</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'admin:index' %}" target="_BLANK" class="item"><span class="ui black label">Admin</span></a>
+            {% endif %}
+            <a href="{% url 'accounts:logout' %}" class="item"><i class="remove icon"></i></a>
+            {% else %}
+            <a href="{% url 'accounts:login' %}" class="item">Login</a>
+            <a href="{% url 'accounts:register' %}" class="item">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% block content %}{% endblock %}
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/semantic.min.js' %}"></script>
+
+    <script type="text/javascript">
+        // See: https://docs.djangoproject.com/en/1.7/ref/contrib/csrf/#ajax
+        function getCookie(e){var t=null;if(document.cookie&&""!=document.cookie)for(var o=document.cookie.split(";"),n=0;n<o.length;n++){var r=jQuery.trim(o[n]);if(r.substring(0,e.length+1)==e+"="){t=decodeURIComponent(r.substring(e.length+1));break}}return t}function csrfSafeMethod(e){return/^(GET|HEAD|OPTIONS|TRACE)$/.test(e)}var csrftoken=getCookie("csrftoken");$.ajaxSetup({beforeSend:function(e,t){csrfSafeMethod(t.type)||this.crossDomain||e.setRequestHeader("X-CSRFToken",csrftoken)}});
+    </script>
+
+    {% block script %}{% endblock %}
+
+</body>
+</html>

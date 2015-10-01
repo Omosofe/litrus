@@ -1,0 +1,4 @@
+django==1.8
+django-paypal==0.2.5
+markdown2==2.3.0
+pytz

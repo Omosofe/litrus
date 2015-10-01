@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <div class="ui page stackable grid">
+        <div class="row">
+            <div class="six wide centered column">
+                <div class="ui warning huge message">
+                    <div class="content">
+                        <div class="header">{% trans 'Sorry! Not found.' %}</div>
+                        <p>{% trans 'We could not found what you are looking for.' %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load litrustags %}
+
+{% block content %}
+    
+    <div class="ui stackable page grid">
+        <div class="row">
+            <div class="six wide column">
+                <h1 id="course-header">{{ course.name }}</h1>
+                {% if not user_enrolled %}
+                <form method="POST" action="{% url 'courses:course-enrollment' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="course_id" value="{{ course.id }}">
+                    <button class="ui green large labeled icon fluid ui button"><i class="student icon"></i> {% trans 'Take This Course Now' %}</button>
+                </form>
+                {% else %}
+                <a href="{% url 'courses:course-dashboard' course.slug %}" class="ui blue large labeled icon fluid ui button">
+                    <i class="share icon"></i>
+                    {% trans 'Go To Course Dashboard' %}
+                </a>
+                {% endif %}
+            </div>
+            <div class="ten wide column">
+                {% if course.video %}
+                <div class="video">
+                    <video id="video" controls>
+                        <source src="{{ course.video.url }}" type='video/mp4'>
+                    </video>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve wide column">
+                <div class="ui segment">
+                    {{ course.description | markdownify | safe }}
+                    <div class="ui divider"></div>
+                    <div class="ui stackable two column grid">
+                        <div class="column">
+                            <div class="ui huge header">{% trans 'Requirements' %}</div>
+                            <ul class="ui bulleted list">
+                            {% for requirement in course.requirements.splitlines %}
+                                <li class="item">{{ requirement }}</a>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <div class="ui huge header">{% trans 'Target Audience' %}</div>
+                            <ul class="ui bulleted list">
+                            {% for target in course.target.splitlines %}
+                                <li class="item">{{ target }}</a>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui huge header">{% trans 'Curriculum' %}</div>
+                {% include "courses/partials/course_curriculum.html" %}
+            </div>
+            <div class="four wide column">
+                <div class="ui massive vertical list">
+                    <div class="item">
+                        <i class="ui bookmark icon"></i>
+                        <div class="content aligned">{{ course.category.name }}</div>
+                    </div>
+                    <div class="item">
+                        <i class="ui comment icon"></i>
+                        <div class="content aligned">{{ course.verbose_language }}</div>
+                    </div>
+                    <div class="item">
+                        <i class="ui signal icon"></i>
+                        <div class="content aligned">{{ course.verbose_level }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

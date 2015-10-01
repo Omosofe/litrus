@@ -1,0 +1,130 @@
+{% extends "courses/course_dashboard.html" %}
+{% load i18n %}
+{% load litrustags %}
+
+{% block subcontent %}
+
+    <h2 class="ui header">
+        <img src="{% gravatar question.user.email %}" class="ui circular image">
+        <div class="content">
+            {{ question.title }}
+            <div class="sub header">
+                {% trans 'By' %} {{ question.user.username }}. {{ question.date_created | date:'d M \a\t H A' }}. 
+                {% if question.lesson %}<a href="{{ question.lesson.get_absolute_url }}" class="ui label">{{ question.lesson.section.number }}.{{ question.lesson.number }} {{ question.lesson.name | truncatechars:20 }}</a>{% endif %}
+                {% if not question.is_open %} <div class="ui purple label">CLOSED</div>{% endif %}
+            </div>
+        </div>
+        
+    </h2>
+    <div class="ui form">
+        <div class="inline fields">
+            {% if user_owns_question or request.user.is_superuser %}
+            <form method="post" action="{% url 'courses:open-close-question' course.slug question.id %}">
+                {% csrf_token %}
+                <button class="ui purple basic compact button">
+                    {% if question.is_open %}<i class="ban icon"></i> Close{% else %}<i class="pin icon"></i> Open{% endif %}
+                </button>
+            </form>
+            <button id="delete-question-button" class="ui red basic compact button">
+                <i class="trash icon"></i> Delete
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <p>{{ question.content }}</p>
+
+    <div class="ui comments">
+      <h3 class="ui dividing header">{% trans 'Comments' %} ({{ comments | length }})</h3>
+      {% for comment in comments %}
+      <div class="comment">
+        <a class="avatar">
+          <img src="{% gravatar comment.user.email %}">
+        </a>
+        <div class="content">
+          <a class="author">{{ comment.user.username }}</a>
+          <div class="metadata">
+            <span class="date">{{ comment.date_created | timesince }}</span>
+          </div>
+          <div class="text">
+            {{ comment.content | markdownify | safe }}
+          </div>
+          {% if user_owns_question or request.user.is_superuser %}
+          <div class="actions">
+            <a href="#{{ comment.id }}" class="delete"><i class="trash icon"></i>Delete</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="ui small info message">
+          <p>{% trans 'No comments to show. Be the first!' %}</p>
+      </div>
+      {% endfor %}
+
+        <form method="post" class="ui reply form" action="{% url 'courses:user-comment-question' course.slug question.id %}">
+            {% csrf_token %}
+            <div class="field">
+                <textarea name="content"></textarea>
+            </div>
+            <button class="ui blue labeled submit icon button">
+                <i class="icon edit"></i> {% trans 'Write Comment' %}
+            </button>
+        </form>
+
+    </div>
+
+    <div id="delete-question-modal" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            {% trans 'Delete Question' %}
+        </div>
+        <div class="content">
+            <div class="description">
+                {% trans 'Are you sure you want to delete the question' %} "{{ question.title }}"?
+            </div>
+        </div>
+        <div class="actions">
+            <form method="post" action="{% url 'courses:delete-question' course.slug question.id %}">
+                {% csrf_token %}
+                <button class="ui red button">{% trans 'Yes! Delete it.' %}</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="delete-comment-modal" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            {% trans 'Delete Comment' %}
+        </div>
+        <div class="content">
+            <div class="description">
+                {% trans 'Are you sure you want to delete this comment?' %}
+            </div>
+        </div>
+        <div class="actions">
+            <form method="post" action="{% url 'courses:delete-comment' course.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="comment_id" value="">
+                <button class="ui red button">{% trans 'Yes! Delete it.' %}</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(function() {
+            $("#delete-question-button").click(function(event) {
+                $('#delete-question-modal').modal('show');
+            });
+
+            $(".delete").click(function(event) {
+                event.preventDefault();
+                $("input[name=comment_id]").val($(this).attr('href').replace('#', ''));
+                $('#delete-comment-modal').modal('show');
+            });
+        });
+    </script>
+{% endblock %}

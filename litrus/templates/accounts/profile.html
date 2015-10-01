@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+    
+{% block content %}
+    
+    <div class="ui stackable page grid">
+        <div class="four wide column">
+            {% if request.user.first_name and request.user.last_name %}
+            <h1 class="ui header">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+            {% endif %}
+            <div class="ui hidden divider"></div>
+            {% block menu %}
+            <div class="ui vertical fluid pointing menu">
+                <a href="{% url 'accounts:profile' %}" class="{% if not active_tab %}active {% endif %}item">{% trans 'My Courses' %}</a>
+                <a href="{% url 'accounts:profile-edit' %}" class="{% if active_tab == "profile" %}active {% endif %}item">{% trans 'Profile' %}</a>
+                <a href="{% url 'accounts:subscription' %}" class="{% if active_tab == "subscription" %}active {% endif %}item">{% trans 'Subscription' %}</a>
+                <a href="{% url 'accounts:settings' %}" class="{% if active_tab == "settings" %}active {% endif %}item">{% trans 'Settings' %}</a>
+            </div>
+            {% endblock %}
+        </div>
+        <div class="twelve wide column">
+            {% block subcontent %}
+            <div class="ui top attached secondary segment">
+                <h3 class="ui header">{% trans 'My Courses' %}</h3>
+            </div>
+            <div class="ui attached segment">
+                <div class="ui items">
+                    {% for course in courses %}
+                    <div class="item">
+                        <div class="ui tiny image"><img src="{% if course.logo %}{{ course.logo.url }}{% else %}{% static 'img/no-image.gif' %}{% endif %}"></div>
+                        <div class="content">
+                            <a href="{{ course.get_dashboard_url }}" class="header">{{ course.name }}</a>
+                            <div class="meta">
+                                <span>Enrolled {{ course.date_enrolled | timesince }} ago.</span>
+                            </div>
+                            <div class="extra"><a class="ui tiny green label">{{ course.completed }}% {% trans 'completed' %}</a></div>
+                        </div>
+                    </div>
+                    {% empty %}
+                        <p>{% trans 'Nothing to show.' %}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="ui attached secondary segment">
+                <h3 class="ui header">{% trans 'My Questions' %}</h3>
+            </div>
+            <div class="ui bottom attached segment">
+                {% if questions %}
+                <div class="ui list">
+                    <div class="ui divided grid">
+                    {% for question in questions %}
+                        <div class="eight wide column">
+                            <div class="item">
+                                <div class="content">
+                                    <a href="{{ question.get_absolute_url }}" class="header"><b>{{ question.title | truncatechars:20 }}</b></a>
+                                    <div class="description"><span style="color:#bbb">{{ question.date_created | date:"j M, y" }}.</span> {{ question.course.name }}{% if not question.is_open %} <div class="ui mini purple label">CLOSED</div>{% endif %}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <p>{% trans 'Nothing to show.' %}</p>
+                {% endif %}
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

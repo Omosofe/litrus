@@ -1,0 +1,58 @@
+{% extends "accounts/profile.html" %}
+{% load i18n %}
+{% load litrustags %}
+
+{% block menu %}
+    {% with "profile" as active_tab %} 
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block subcontent %}
+    
+    <div class="ui top attached secondary segment">
+        <h3 class="ui header">{% trans 'Profile' %}</h3>
+    </div>
+    <div class="ui attached segment">
+        <form class="ui error form" method="post" action="{% url 'accounts:profile-edit' %}">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="ui error message">
+                <div class="header">{% trans 'Ups! Something is wrong' %}</div>
+                <ul class="list">
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <div class="two fields">
+                <div class="field">
+                    <label>Username</label>
+                    <input placeholder="{{ request.user.username }}" readonly="" type="text">
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input placeholder="{{ request.user.email }}" readonly="" type="text">
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="field{% if form.errors.first_name %} error{% endif %}">
+                    <label>{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="field{% if form.errors.last_name %} error{% endif %}">
+                    <label>{{ form.last_name.label }}</label>
+                    {{ form.last_name }}
+                </div>
+            </div>
+            <input class="ui submit large positive button" type="submit" value="{% trans 'Update' %}" />
+        </form>
+    </div>
+    <div class="ui attached segment">
+        <img class="ui centered rounded image" src="{% gravatar request.user.email %}&s=200">
+    </div>
+    <div class="ui bottom attached info message">
+        <p>{% trans 'Change your image at Gravatar.' %} <a href="https://gravatar.com" target="_BLANK"><b>{% trans 'Click here!' %}</b></a></p>
+    </div>
+{% endblock %}

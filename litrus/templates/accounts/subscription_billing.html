@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    
+    <div class="ui stackable page grid">
+        <div class="row">
+            <div class="twelve wide centered column">
+                <div class="ui center aligned segment">
+                    <h1 class="ui header">
+                        Subscribe now!
+                        <div class="sub header">{% trans 'And have access to all the content.' %}</div>
+                    </h1>
+                    <div class="ui hidden divider"></div>
+                    {% if plans %}
+                    <div class="ui two doubling cards">
+                        {% for plan in plans %}
+                        <div class="card">
+                            <div class="content">
+                                <div class="header">{{ plan.name }}</div>
+                                <div class="meta">
+                                    <span class="category">{{ plan.months }} {% trans 'months of full access' %}</span>
+                                </div>
+                                {% if plan.description %}
+                                <div class="ui secondary segment">{{ plan.description }}</div>
+                                {% else %}
+                                <div class="ui hidden divider"></div>
+                                {% endif %}
+                                <form method="post" action="{{ plan.form.get_endpoint }}">
+                                    {{ plan.form.as_p }}
+                                    <button class="ui positive big fluid button"><i>U$D</i> {{ plan.price }}</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="ui yellow message">
+                        <p>{% trans 'No plans to show.' %}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="ui info icon message">
+                    <i class="paypal icon"></i>
+                    <div class="content">
+                    <p>{% trans 'For your security you will be redirected to' %} <a href="https://www.paypal.com" target="_BLANK"><b>paypal.com</b></a>.</p>
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

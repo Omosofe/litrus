@@ -1,0 +1,46 @@
+{% extends "courses/course_dashboard.html" %}
+{% load i18n %}
+
+{% block subcontent %}
+
+    <form class="ui error form" method="post" action="{% url 'courses:course-discussion-question-add' course.slug %}">
+        <h1 class="ui header">{% trans 'Add New Question' %}</h1>
+        <div class="ui section divider"></div>
+        {% csrf_token %}
+        {% if error %}
+        <div class="ui error message">
+            <div class="header">{% trans 'Ups! Something is wrong' %}</div>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+        <div class="two fields">
+            <div class="field">
+                <label>Title</label>
+                <input name="title" type="text">
+            </div>
+            <div class="field">
+                <label>{% trans 'Is referred to some lesson?' %}</label>
+                <select name="lesson" class="ui fluid dropdown">
+                    <option value=""></option>
+                    {% for lesson in lessons %}
+                    <option value="{{ lesson.id }}">{{ lesson.section.number }}.{{ lesson.number }} - {{ lesson.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="field">
+            <label>Content</label>
+            <textarea name="content"></textarea>
+        </div>
+        <input class="ui submit big positive button" type="submit" value="{% trans 'Ok' %}" />
+    </form>
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(function() {
+            $('select.dropdown').dropdown();
+        });
+    </script>
+{% endblock %}

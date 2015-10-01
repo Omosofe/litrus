@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <div class="ui stackable page grid">
+        <div class="ten wide centered column">
+            <div class="ui center aligned raised segment">
+                <h1 class="ui huge header">
+                    {% trans 'What course will your life take?' %}
+                    <div class="sub header">{% trans 'Own your future by learning new skills online' %}</div>
+                </h1>
+                <form class="ui form" method="get" action="{% url 'courses:courses' %}">
+                    <div class="ui huge icon input">
+                        <input name="search" type="text">
+                        <i class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

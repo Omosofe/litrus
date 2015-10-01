@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    
+    <div class="ui page stackable grid">
+        <div class="row">
+            <div class="eight wide centered column">
+                <form class="ui form" method="post" action="{% url 'accounts:login' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {% if error %}
+                    <div class="ui yellow message">
+                        <p>{{ error }}</p>
+                    </div>
+                    {% endif %}
+                    <div class="field">
+                        <div class="ui huge left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="username_or_email" placeholder="{% trans 'Username or Email' %}">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui huge left icon input">
+                            <i class="key icon"></i>
+                            <input type="password" name="password" placeholder="{% trans 'Password' %}">
+                        </div>
+                    </div>
+                    <input class="ui submit big fluid primary button" type="submit" value="Login" />
+                </form>
+                <div class="ui basic right aligned segment">
+                    <a href="{% url 'accounts:password-reset' %}">Lost your password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    
+    <div class="ui stackable page grid">
+        <div class="eleven wide column">
+
+            {% if request.GET.search %}
+            <div class="ui large disabled header">
+                {% trans 'Search results for' %} "{{ request.GET.search }}"
+            </div>
+            {% endif %}
+
+            {% if courses %}
+            <div class="ui two cards">
+                {% for course in courses %}
+                <div class="card">
+                    <div class="blurring dimmable image">
+                        <div class="ui inverted dimmer">
+                            <div class="content">
+                                <div class="center">
+                                    <a href="{{ course.get_absolute_url }}" class="ui blue button">{% trans 'Read More' %}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <img style="background-size:cover;background-position:center center;" src="{% if course.logo %}{{ course.logo.url }}{% else %}{% static 'img/no-image.gif' %}{% endif %}">
+                    </div>
+                    <div class="content">
+                        <a href="{{ course.get_absolute_url }}" class="header">{{ course.name }}</a>
+                        <div class="meta"><a href="{{ course.category.get_absolute_url }}">{{ course.category.name }}</a> / {{ course.verbose_language }}</div>
+                        <div class="description">{{ course.short_description }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="ui info message">
+                <p>{% trans 'We could not find any courses.' %}</p>
+            </div>
+            {% endif %}
+
+        </div>
+        <div class="five wide column">
+            <div class="ui segment">
+                <h4 class="ui header">Total courses listed: <span class="ui circular label">{{ courses.count }}</span></h4>
+                <form class="ui form" method="get">
+                    <div class="ui icon input">
+                        <input name="search" type="text" placeholder="{% trans 'Search courses ...' %}">
+                        <i class="search link icon"></i>
+                    </div>
+                </form>
+                <h2 class="ui header">{% trans 'Categories' %}</h2>
+                <div class="ui link list">
+                    {% for category in categories %}
+                    <a href="{{ category.get_absolute_url }}" class="item">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(function() {
+            $('.cards .image').dimmer({
+                on: 'hover'
+            });
+        });
+    </script>
+{% endblock %}
+

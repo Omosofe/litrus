@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    
+    <div class="ui page stackable grid">
+        <div class="row">
+            <div class="ten wide centered column">
+                <form class="ui error form segment" method="post" action="{% url 'accounts:register' %}">
+                    <h1 class="ui center aligned header">{% trans 'Create your account' %}</h1>
+                    <div class="ui section divider"></div>
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                    <div class="ui error message">
+                        <div class="header">{% trans 'Ups! Something is wrong' %}</div>
+                        <ul class="list">
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    <div class="two fields">
+                        <div class="field{% if form.errors.username %} error{% endif %}">
+                            <label>{{ form.username.label }}</label>
+                            {{ form.username }}
+                        </div>
+                        <div class="field{% if form.errors.email %} error{% endif %}">
+                            <label>{{ form.email.label }}</label>
+                            {{ form.email }}
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field{% if form.errors.password %} error{% endif %}">
+                            <label>{{ form.password.label }}</label>
+                            {{ form.password }}
+                        </div>
+                        <div class="field{% if form.errors.password_again %} error{% endif %}">
+                            <label>{{ form.password_again.label }}</label>
+                            {{ form.password_again }}
+                        </div>
+                    </div>
+                    <input class="ui submit big positive button" type="submit" value="{% trans 'Register' %}" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

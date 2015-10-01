@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <div class="ui page stackable grid">
+        <div class="row">
+            <div class="ten wide centered column">
+                <div class="ui info huge icon message">
+                    <i class="warning circle loading icon"></i>
+                    <div class="content">
+                        <div class="header">{% trans 'Sorry! Permission denied.' %}</div>
+                        <p>{% trans 'You should not be here.' %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

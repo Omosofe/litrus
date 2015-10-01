@@ -1,0 +1,27 @@
+{% load i18n %}
+
+{% for section in course.sections %}
+<h4 class="ui {% if forloop.first %}top {% endif %}attached header">
+    {{ section.number }} - {{ section.name }}
+</h4>
+<div class="ui {% if forloop.last %}bottom {% endif %}attached segment">
+    <div class="ui list">
+    {% for lesson in section.lessons %}
+        {% if not lesson.draft %}
+        <a href="{% url 'courses:course-lesson' course.slug lesson.id %}" class="item lesson">
+            {% if lesson.video or lesson.content %}
+            <div class="right floated compact ui icon button">
+                {% if lesson.video %}<i class="record icon"></i>{% endif %}
+                {% if lesson.content %}<i class="file text icon"></i>{% endif %}
+            </div>
+            {% endif %}
+            <i class="ui right triangle icon"></i>
+            <div class="content">
+                <div class="header">{{ lesson.name }}{% if lesson.id in lessons_taken %} <i class="ui checkmark green icon"></i>{% endif %}</div>
+            </div>
+        </a>
+        {% endif %}
+    {% endfor %}
+    </div>
+</div>
+{% endfor %}

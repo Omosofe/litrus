@@ -1,0 +1,37 @@
+{% extends "accounts/profile.html" %}
+{% load i18n %}
+
+{% block menu %}
+    {% with "subscription" as active_tab %} 
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block subcontent %}
+    
+    <div class="ui top attached secondary segment">
+        <h3 class="ui header">{% trans 'Subscription' %}</h3>
+    </div>
+    <div class="ui attached segment">
+        {% if subscription %}
+        <p>{% trans 'Thanks for your subscription. Now you have access to all of our courses.' %}</p>
+        <div class="ui horizontal segments">
+            <div class="ui center aligned segment">
+                <div class="ui statistic">
+                    <div class="value">{{ subscription.date_subscribed | date:'d M Y' }}</div>
+                    <div class="label">{% trans 'Date Subscribed' %}</div>
+                </div>
+            </div>
+            <div class="ui center aligned segment">
+                <div class="ui orange statistic">
+                    <div class="value">{{ subscription.date_expiration | date:'d M Y' }}</div>
+                    <div class="label">{% trans 'Date Expiration' %}</div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p>{% trans 'You are not subscribed.' %} <a href="{% url 'accounts:subscription-billing' %}" class="ui positive tiny button">{% trans 'Subscribe Now!' %}</a></p>
+        {% endif %}
+    </div>
+
+{% endblock %}

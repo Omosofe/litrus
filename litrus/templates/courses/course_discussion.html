@@ -1,0 +1,77 @@
+{% extends "courses/course_dashboard.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load litrustags %}
+
+{% block subcontent %}
+
+    <div class="ui doubling two column grid">
+        <div class="ten wide column">
+            <h3 class="ui dividing header">{% trans 'Questions' %}</h3>
+            <div class="ui large list">
+                {% for question in questions %}
+                <div class="item">
+                    <img class="ui avatar image" data-content="{{ question.user.username }}" data-position="left center" data-variation="inverted" src="{% gravatar question.user.email %}">
+                    <div class="content">
+                        <a href="{% url 'courses:course-discussion-question' course.slug question.id %}" class="header">{{ question.title }}</a>
+                        <div class="description" style="color:#ccc;font-size:15px">{% if not question.is_open %} <div class="ui purple mini label">CLOSED</div> {% endif %}{{ question.date_created | date:'d M' }}. {% if question.lesson %}<b>{{ question.lesson.section.number }}.{{ question.lesson.number }} {{ question.lesson.name | truncatechars:20 }}</b>{% endif %}</div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="ui small info message">
+                    <p>{% trans 'No questions to show. Be the first!' %}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="ui hidden divider"></div>
+            <div class="ui tiny buttons">
+                <a{% if questions.has_previous %} href="{% url 'courses:course-discussion' course.slug %}?page={{ questions.previous_page_number }}"{% endif %} class="ui labeled icon{% if not questions.has_previous %} disabled{% endif %} button"><i class="left chevron icon"></i> {% trans 'Back' %}</a>
+                <a{% if questions.has_next %} href="{% url 'courses:course-discussion' course.slug %}?page={{ questions.next_page_number }}"{% endif %} class="ui right labeled icon{% if not questions.has_next %} disabled{% endif %} button">{% trans 'Forward' %} <i class="right chevron icon"></i></a>
+            </div>
+            <h3 class="ui dividing header">{% trans 'Recent Comments' %}</h3>
+            <div class="ui small list">
+                {% for comment in recent_comments %}
+                <div class="item">
+                    <img class="ui avatar image" src="{% gravatar comment.user.email %}">
+                    <div class="content">
+                    <a class="header">{{ comment.user.username }}</a>
+                    <div class="description">On question <a href="{% url 'courses:course-discussion-question' course.slug comment.question.id %}"><b>{{ comment.question.title | truncatechars:20 }}</b></a> about {{ comment.date_created | timesince }} ago.</div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="ui small info message">
+                    <p>{% trans 'No comments to show.' %}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="six wide column">
+            <a href="{% url 'courses:course-discussion-question-add' course.slug %}" class="ui labeled green fluid icon large button"><i class="pencil icon"></i> {% trans 'Write Question' %}</a>
+            <div class="ui basic floated segment">
+                <div class="ui statistics">
+                    <div class="statistic">
+                        <div class="label">{% trans 'Students' %}</div>
+                        <div class="value">{{ users_enrolled_count }}</div>
+                    </div>
+                    <div class="statistic">
+                        <div class="label">{% trans 'Questions' %}</div>
+                        <div class="value">{{ questions_count }}</div>
+                    </div>
+                    <div class="statistic">
+                        <div class="label">{% trans 'Closed' %}</div>
+                        <div class="value">{{ questions_closed_count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(function() {
+            $('img').popup();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    
+    <div class="ui stackable page grid">
+        <div class="fifteen wide centered column">
+            <h1 class="ui header">
+                <img src="{% if course.logo %}{{ course.logo.url }}{% else %}{% static 'img/no-image.gif' %}{% endif %}" class="ui circular image">
+                {{ course.name }}
+            </h1>
+            <div class="ui hidden divider"></div>
+            <div class="ui pointing menu">
+                <a href="{% url 'courses:course-dashboard' course.slug %}" class="item">{% trans 'Curriculum' %}</a>
+                <a href="{% url 'courses:course-discussion' course.slug %}" class="item">{% trans 'Discussion' %}</a>
+            </div>
+            <div class="ui segment">
+            {% block subcontent %}
+                <div class="ui doubling two column grid">
+                    <div class="ten wide column">
+                        <div class="ui green progress active" data-percent="{{ completed }}" style="margin-bottom:0">
+                            <div class="bar" style="transition-duration: 300ms; width: {{ completed }}%;">
+                                <div class="progress">{{ completed }} %</div>
+                            </div>
+                        </div>
+                        {% include "courses/partials/course_curriculum.html" %}
+                    </div>
+                    <div class="six wide column">
+                        {% if next_lesson_url %}
+                        <a href="{{ next_lesson_url }}" class="ui right labeled blue fluid icon button"><i class="right arrow icon"></i>Next Lesson</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

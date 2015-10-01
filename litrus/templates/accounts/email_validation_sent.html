@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    
+    <div class="ui page stackable grid">
+        <div class="row">
+            <div class="eight wide centered column">
+                <h1 class="ui icon header">
+                    <i class="mail icon"></i>
+                    <div class="content">
+                        {% trans 'Check your inbox!' %}
+                        <div class="ui hidden header"></div>
+                        <div class="sub header">{% trans 'We sent you an email so you can activate your account' %}: <i>{{ email }}</i></div>
+                    </div>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

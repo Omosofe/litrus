@@ -1,0 +1,33 @@
+{% extends "courses/course_dashboard.html" %}
+{% load i18n %}
+{% load litrustags %}
+
+{% block subcontent %}
+    
+    <div class="ui huge breadcrumb">
+        <a href="{% url 'courses:course-dashboard' course.slug %}" class="section">{{ lesson.section.number }} - {{ lesson.section.name | capfirst }}</a>
+        <i class="right chevron icon divider"></i>
+        <div class="active section">{{ lesson.number }} - {{ lesson.name | capfirst }}</div>
+    </div>
+
+    {% if lesson.video %}
+    <div class="video">
+        <video id="video" controls>
+            <source src="{{ lesson.video.url }}" type='video/mp4'>
+        </video>
+    </div>
+    {% endif %}
+
+    {% if lesson.content %}
+    <div class="ui divider"></div>
+    <p>{{ lesson.content | markdownify | safe }}</p>
+    {% endif %}
+
+    <div class="ui right floated secondary compact segment"><i class="pencil icon"></i> {% trans 'Last edition was on' %} {{ lesson.date_edited | date:'d M, ha' }}</div>
+    <form method="POST" action="{% url 'courses:user-finish-lesson' %}">
+        {% csrf_token %}
+        <input type="hidden" name="lesson_id" value="{{ lesson.id }}">
+        <button class="ui huge labeled icon fluid blue ui button"><i class="right arrow icon"></i> {% trans 'Continue' %}</button>
+    </form>
+
+{% endblock %}
