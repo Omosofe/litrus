@@ -43,7 +43,7 @@ class CourseCategory(models.Model):
         verbose_name_plural = 'Course Categories'
 
     def __str__(self):
-        return self.name
+        return u'{0}'.format(self.name)
 
     def __unicode__(self):
         return self.__str__()
@@ -75,7 +75,7 @@ class Course(models.Model):
         verbose_name_plural = 'Courses'
 
     def __str__(self):
-        return '{0} | {1}{2}'.format(self.category.name, self.slug,
+        return u'{0} | {1}{2}'.format(self.category.name, self.slug,
                                   ' [DRAFT]' if self.draft else '')
 
     def __unicode__(self):
@@ -161,7 +161,7 @@ class CourseSection(models.Model):
         verbose_name_plural = 'Course Sections'
 
     def __str__(self):
-        return '{0} | {1} {2}'.format(self.course.slug, self.number, self.name)
+        return u'{0} | {1} {2}'.format(self.course.slug, self.number, self.name)
 
     def __unicode__(self):
         return self.__str__()
@@ -196,7 +196,7 @@ class CourseLesson(models.Model):
         verbose_name_plural = 'Course Lessons'
 
     def __str__(self):
-        return '{0} | {1}.{2} {3}{4}'.format(self.section.course.slug,
+        return u'{0} | {1}.{2} {3}{4}'.format(self.section.course.slug,
                                               self.section.number,
                                               self.number, self.name,
                                               ' [DRAFT]' if self.draft else '')
@@ -237,7 +237,7 @@ class CourseEnrollment(models.Model):
         verbose_name_plural = 'Course Enrollments'
 
     def __str__(self):
-        return '{0} | {1} | {2}'.format(
+        return u'{0} | {1} | {2}'.format(
             self.user.username, self.course.slug,
             self.date_enrolled.strftime('%b %d, %Y'))
 
@@ -256,7 +256,7 @@ class Subscription(models.Model):
         verbose_name_plural = 'User Subscriptions'
 
     def __str__(self):
-        return '{0} | Subscribed {1} | Expires {2}'.format(
+        return u'{0} | Subscribed {1} | Expires {2}'.format(
             self.user.username, self.date_subscribed.strftime('%b %d, %Y'),
             self.date_expiration.strftime('%b %d, %Y'))
 
@@ -281,7 +281,7 @@ class SubscriptionPlan(models.Model):
         verbose_name_plural = 'Subscription Plans'
 
     def __str__(self):
-        return '{0} | {1} | ${2} For {3} Months'.format(
+        return u'{0} | {1} | ${2} For {3} Months'.format(
             self.level, self.name, self.price, self.months)
 
     def __unicode__(self):
@@ -308,7 +308,7 @@ class UserLesson(models.Model):
         verbose_name_plural = 'User lessons'
 
     def __str__(self):
-        return '{0} takes lesson {1}'.format(
+        return u'{0} takes lesson {1}'.format(
             self.user.username, self.lesson.id)
 
     def __unicode__(self):
@@ -327,7 +327,7 @@ class DiscussionQuestion(models.Model):
     date_edited = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'On {0} | {1}'.format(self.course.slug, self.title)
+        return u'On {0} | {1}'.format(self.course.slug, self.title)
 
     def __unicode__(self):
         return self.__str__()
@@ -346,7 +346,7 @@ class DiscussionComment(models.Model):
     date_edited = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'On {0} | By {1}'.format(self.question.course.slug,
+        return u'On {0} | By {1}'.format(self.question.course.slug,
                                         self.user.username)
 
     def __unicode__(self):
@@ -364,7 +364,7 @@ class PasswordResetToken(models.Model):
         verbose_name_plural = 'Password Tokens'
 
     def __str__(self):
-        return 'On {0} | By {1}'.format(self.date_sent.strftime('%b %d, %Y'),
+        return u'On {0} | By {1}'.format(self.date_sent.strftime('%b %d, %Y'),
                                         self.user.username)
 
     def __unicode__(self):
@@ -386,7 +386,7 @@ class EmailValidationToken(models.Model):
         verbose_name_plural = 'Email Validation Tokens'
 
     def __str__(self):
-        return 'On {0} | By {1}'.format(self.date_sent.strftime('%b %d, %Y'),
+        return u'On {0} | By {1}'.format(self.date_sent.strftime('%b %d, %Y'),
                                         self.user.username)
 
     def __unicode__(self):
