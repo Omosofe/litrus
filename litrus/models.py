@@ -65,7 +65,7 @@ class Course(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGES)
     level = models.PositiveSmallIntegerField(choices=LEVELS)
     short_description = models.TextField()
-    description = models.TextField(help_text='You <b>CAN</b> use Markdown here.')
+    description = models.TextField(help_text='Use Markdown here.')
     requirements = models.TextField()
     target = models.TextField()
 
